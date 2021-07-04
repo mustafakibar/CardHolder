@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/cardImage">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textView1"
+                style="@style/CardView.TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/cardName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.3" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cardName"
+                style="@style/CardView.EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/enterCardName"
+                app:layout_constraintBottom_toBottomOf="@+id/textView1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/textView1"
+                app:layout_constraintTop_toTopOf="@id/textView1" />
+
+            <View
+                android:id="@+id/divider1"
+                style="@style/CardView.Divider"
+                app:layout_constraintBottom_toTopOf="@+id/textView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardName" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textView2"
+                style="@style/CardView.TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/cardNumber"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1"
+                app:layout_constraintWidth_percent="0.3" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cardNumber"
+                style="@style/CardView.EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/enterCardNumber"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/divider1" />
+
+            <View
+                android:id="@+id/divider2"
+                style="@style/CardView.Divider"
+                app:layout_constraintBottom_toTopOf="@+id/textView3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardNumber" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textView3"
+                style="@style/CardView.TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/cardExpireDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2"
+                app:layout_constraintWidth_percent="0.3" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cardExpire"
+                style="@style/CardView.EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/enterCardExpireDate"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
+
+            <View
+                android:id="@+id/divider3"
+                style="@style/CardView.Divider"
+                app:layout_constraintBottom_toTopOf="@+id/textView4"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardExpire" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textView4"
+                style="@style/CardView.TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/bankName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider3"
+                app:layout_constraintWidth_percent="0.3" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cardIssuer"
+                style="@style/CardView.EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+            <View
+                android:id="@+id/divider4"
+                style="@style/CardView.Divider"
+                app:layout_constraintBottom_toTopOf="@+id/textView5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/cardIssuer" />
+
+            <com.google.android.material.textview.MaterialTextView
+                android:id="@+id/textView5"
+                style="@style/CardView.TextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/organization"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider4"
+                app:layout_constraintWidth_percent="0.3" />
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/cardOrganization"
+                style="@style/CardView.EditText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView5"
+                app:layout_constraintTop_toBottomOf="@+id/divider4" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

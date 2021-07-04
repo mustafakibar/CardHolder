@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.vinaygaba.creditcardview.CreditCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/creditCard"
+    android:layout_width="match_parent"
+    android:layout_height="225dp"
+    android:layout_marginLeft="32dp"
+    android:layout_marginRight="32dp"
+    android:layout_marginTop="32dp"
+    android:background="@drawable/cardbackground_world"
+    app:cardNameTextColor="@android:color/transparent"
+    app:cardNumberFormat="all_digits"
+    app:cardNumberTextColor="#cccccc"
+    app:expiryDateTextColor="#cccccc"
+    app:hintTextColor="#cccccc"
+    app:isEditable="false"
+    app:putChip="true"
+    app:type="auto"
+    app:validTillTextColor="#cccccc">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/createdAt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/text_background"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:textStyle="bold"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        tools:text="Oluşturulduğu tarih" />
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="-24dp"
+        android:background="@drawable/delete_button_background"
+        app:srcCompat="@drawable/ic_baseline_delete_24" />
+
+</com.vinaygaba.creditcardview.CreditCardView>
