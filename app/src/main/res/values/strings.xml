@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Card Holder</string>
+    <string name="cliend_id">104487363</string>
+    <string name="client_secret">ef4fbdc1585e9dde82ac8facfe2769f82ca367de728ed5d9fd739aef10e29220</string>
+    <string name="accept">Onayla</string>
+    <string name="add">Ekle</string>
+    <string name="cardName">Kart ismi</string>
+    <string name="enterCardName">Kart ismini giriniz</string>
+    <string name="cardNumber">Kart numarası</string>
+    <string name="enterCardNumber">Kartın numarasını giriniz</string>
+    <string name="cardExpireDate">Son kullanım tarihi</string>
+    <string name="enterCardExpireDate">Son kullanım tarihini giriniz</string>
+    <string name="bankName">Banka ismi</string>
+    <string name="organization">Organizasyon</string>
+    <string name="yourCards">Kartlarınız</string>
+    <string name="warnForAddNewCard">Henüz kartınız yok, eklemek için sağ yukardaki ekle butonunu seçiniz</string>
+    <string name="noBankName">Banka ismi yok</string>
+</resources>

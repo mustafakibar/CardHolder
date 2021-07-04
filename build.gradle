@@ -1,0 +1,34 @@
+buildscript {
+    ext {
+        coroutine = '1.5.0'
+        lifecycle_ktx = '2.3.1'
+        dagger = '2.37'
+        retrofit = '2.9.0'
+        room = '2.3.0'
+    }
+
+    repositories {
+        mavenCentral()
+        google()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:4.1.3'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.20"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:${dagger}"
+        classpath 'com.huawei.agconnect:agcp:1.5.1.300'
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://developer.huawei.com/repo/' }
+    }
+}
