@@ -80,6 +80,10 @@ class SearchKitWebSearchDaoImpl @Inject constructor(
             return cache[text]!!
         }
 
+        if (text.isEmpty()) {
+            return Collections.emptyList()
+        }
+
         return SearchKitInstance.getInstance().webSearcher
             .search(searchRequest.apply { setQ(text) })
             .data

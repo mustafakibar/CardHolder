@@ -10,6 +10,7 @@ import kibar.cardholder.model.BankCard
 import kibar.cardholder.model.SearchResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -44,6 +45,16 @@ class MainActivityViewModel @Inject constructor(
     suspend fun handleOnCardSelected(bankCard: BankCard) {
         lastSelectedCard.postValue(bankCard)
         if (bankCard.issuer != null) {
+            if (bankCard.issuer.isBlank()) {
+                selectedBankCardWebSearchResult.postValue(
+                    BankCardSearchResult.Success(
+                        bankCard = bankCard,
+                        results = Collections.emptyList()
+                    )
+                )
+                return
+            }
+
             try {
                 selectedBankCardWebSearchResult.postValue(BankCardSearchResult.Loading)
                 selectedBankCardWebSearchResult.postValue(
