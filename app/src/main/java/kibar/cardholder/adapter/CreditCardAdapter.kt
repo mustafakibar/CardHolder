@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import kibar.cardholder.databinding.CreditCardItemRowBinding
 import kibar.cardholder.model.BankCard
+import kibar.cardholder.utils.simpleDateFormat
 
 typealias OnCreditCardItemDeleted = (BankCard) -> Unit
 
@@ -37,7 +38,7 @@ class CreditCardAdapter(
             expiryDate = bankCard.expire
 
             viewHolder.view.cardName.text = bankCard.name
-            viewHolder.view.createdAt.text = bankCard.createdAt
+            viewHolder.view.createdAt.text = simpleDateFormat.format(bankCard.createdAt)
 
             val organization = bankCard.organization ?: ""
             type = when {

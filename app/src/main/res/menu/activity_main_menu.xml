@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/menu_mic"
+        android:icon="@drawable/ic_baseline_mic_24"
+        android:title="@string/record"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_add"
         android:icon="@drawable/ic_baseline_add_circle_outline_24"
         android:title="@string/add"

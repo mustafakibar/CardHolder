@@ -4,7 +4,6 @@ import kibar.cardholder.model.BinResult
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.Path
-import javax.inject.Inject
 
 interface BinApiService {
     @Headers("Accept-Version: 3")

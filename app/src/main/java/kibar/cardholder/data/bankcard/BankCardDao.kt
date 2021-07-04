@@ -10,7 +10,7 @@ import kibar.cardholder.model.BankCard
 @Dao
 interface BankCardDao {
 
-    @Query("SELECT * FROM bank_card")
+    @Query("SELECT * FROM bank_card ORDER BY createdAt DESC")
     fun getAll(): LiveData<List<BankCard>>
 
     @Query("SELECT * FROM bank_card WHERE name LIKE :name LIMIT 1")

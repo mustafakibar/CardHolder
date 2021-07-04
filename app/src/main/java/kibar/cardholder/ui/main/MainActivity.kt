@@ -1,7 +1,6 @@
 package kibar.cardholder.ui.main
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager.PERMISSION_GRANTED
@@ -15,6 +14,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DefaultItemAnimator
@@ -23,8 +23,13 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SimpleOnItemTouchListener
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.huawei.hms.mlplugin.asr.MLAsrCaptureActivity
+import com.huawei.hms.mlplugin.asr.MLAsrCaptureConstants
 import com.huawei.hms.mlplugin.card.bcr.MLBcrCapture
 import com.huawei.hms.mlplugin.card.bcr.MLBcrCaptureResult
+import com.huawei.hms.mlsdk.asr.MLAsrConstants
+import com.huawei.hms.mlsdk.asr.MLAsrListener
+import com.huawei.hms.mlsdk.asr.MLAsrRecognizer
 import com.jackandphantom.carouselrecyclerview.CarouselLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import kibar.cardholder.R
@@ -47,6 +52,7 @@ import javax.inject.Inject
 class MainActivity : BaseActivity() {
 
     companion object {
+        private const val ASR_REQUEST = 300
         private const val KEY_NAME_INSTANCE_STATE_PERM_DATA = "STATE_PERM_DATA"
     }
 
@@ -59,26 +65,41 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var cardViewHelper: CardViewHelper
 
+    @Inject
+    lateinit var asrRecognizer: MLAsrRecognizer
+
     private val viewModel: MainActivityViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
     private var permData = mutableMapOf<Int, Boolean>()
 
-    private val callback: MLBcrCapture.Callback by lazy {
+    private val asrListener by lazy {
+        object : MLAsrListener {
+            override fun onResults(result: Bundle?) {}
+            override fun onRecognizingResults(partialResult: Bundle?) {}
+            override fun onError(errorCode: Int, errorMessage: String?) {}
+            override fun onStartListening() {}
+            override fun onStartingOfSpeech() {}
+            override fun onVoiceDataReceived(p0: ByteArray?, p1: Float, p2: Bundle?) {}
+            override fun onState(p0: Int, p1: Bundle?) {}
+        }
+    }
+
+    private val bcrListener by lazy {
         object : MLBcrCapture.Callback {
             override fun onSuccess(result: MLBcrCaptureResult) {
                 cardViewHelper.startActivityForResult(this@MainActivity, result)
             }
 
             override fun onFailure(recCode: Int, bitmap: Bitmap) {
-                toast("Kart tarama işlemi yapılamadı: Hata kodu: $recCode")
+                toast(getString(R.string.unableToScanCardWithErrorCode, recCode))
             }
 
             override fun onCanceled() {
-                toast("Kart tarama işlemini iptal ettiniz")
+                toast(getString(R.string.cardScanCanceled))
             }
 
             override fun onDenied() {
-                toast("Kart tarama işlemi kamera tarafından desteklenmiyor")
+                toast(getString(R.string.cardScanNotSupportedByCamera))
             }
         }
     }
@@ -93,18 +114,18 @@ class MainActivity : BaseActivity() {
 
         lifecycleScope.launchWhenStarted {
             binding.recyclerBankCard.apply {
-                set3DItem(true)
+                set3DItem(false)
                 setInfinite(true)
                 setAlpha(true)
+                setIntervalRatio(0.85f)
             }
 
             fun performBankCardItemSelection(position: Int) {
                 val selectedCard = viewModel.bankCards.value?.get(position)
                 if (selectedCard != null) {
-                    @SuppressLint("SetTextI18n")
                     binding.cardDetailsHeaderTitle.text =
                         if (selectedCard.issuer?.isNotBlank() == true)
-                            "${getString(R.string.bankName)}: ${selectedCard.issuer}"
+                            getString(R.string.mainBankNameTitle, selectedCard.issuer)
                         else getString(R.string.noBankName)
 
                     lifecycleScope.launch { viewModel.handleOnCardSelected(selectedCard) }
@@ -140,7 +161,8 @@ class MainActivity : BaseActivity() {
                 }
 
                 supportActionBar?.title =
-                    if (size == 0) "Henüz kartınız yok" else "$size adet kartınız var"
+                    if (size == 0) getString(R.string.noCardFounds)
+                    else getString(R.string.totalCards, size)
             })
 
             binding.recyclerSearchResult.apply {
@@ -179,7 +201,7 @@ class MainActivity : BaseActivity() {
                     is BankCardSearchResult.Fail -> {
                         toast(
                             bankCardWithSearchResult.err.message
-                                ?: "Bankaya ait kampanya bilgilere ulaşılamadı"
+                                ?: getString(R.string.unableToFetchCampaignInformationOfYourBank)
                         )
                     }
                     BankCardSearchResult.Loading -> {
@@ -195,22 +217,39 @@ class MainActivity : BaseActivity() {
                 }
             }
 
-            PermissionUtil.Camera.requestPermission()
-            PermissionUtil.ReadExternalStorage.requestPermission()
+            viewModel.initML(this@MainActivity)
+
+            PermissionUtil.Camera.requestPermission { PermissionUtil.ReadExternalStorage.requestPermission() }
         }
 
         super.onCreate(savedInstanceState)
     }
 
     private fun startCapture() {
-        PermissionUtil.Camera.requestPermission()
-        PermissionUtil.ReadExternalStorage.requestPermission()
-        bcrCapture.captureFrame(this, this.callback)
+        PermissionUtil.Camera.requestPermission { PermissionUtil.ReadExternalStorage.requestPermission() }
+
+        bcrCapture.captureFrame(this, this.bcrListener)
     }
 
-    private fun PermissionUtil.requestPermission() {
+    // todo
+    private fun startRecognizing() {
+        PermissionUtil.RecordAudio.requestPermission() {
+            asrRecognizer.setAsrListener(asrListener)
+            startActivityForResult(
+                this, Intent(this, MLAsrCaptureActivity::class.java)
+                    .putExtra(MLAsrCaptureConstants.LANGUAGE, MLAsrConstants.LAN_EN_US)
+                    .putExtra(
+                        MLAsrCaptureConstants.FEATURE,
+                        MLAsrCaptureConstants.FEATURE_WORDFLUX
+                    ), ASR_REQUEST, null
+            )
+        }
+    }
+
+    private fun PermissionUtil.requestPermission(chainFn: () -> Unit = {}) {
         if (checkSelfPermission(applicationContext, name) == PERMISSION_GRANTED) {
             permData[requestCode] = true
+            chainFn()
             return
         }
 
@@ -226,8 +265,8 @@ class MainActivity : BaseActivity() {
                     .apply {
                         title = askUserDialogTitle
                         setMessage(askUserDialogMessage)
-                        setNegativeButton("İptal") { _, _ -> toast("İzin verilmedi") }
-                        setPositiveButton("Uygulama Ayarlarını Aç") { _, _ ->
+                        setNegativeButton(getString(R.string.cancel)) { _, _ -> toast(getString(R.string.accessDenied)) }
+                        setPositiveButton(getString(R.string.openAppSettings)) { _, _ ->
                             startActivity(
                                 Intent(
                                     Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
@@ -268,6 +307,7 @@ class MainActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_add -> startCapture()
+            R.id.menu_mic -> startRecognizing()
         }
 
         return super.onOptionsItemSelected(item)
@@ -296,10 +336,16 @@ class MainActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        cardViewHelper.handleActivityResult(
+        val handled = cardViewHelper.handleActivityResult(
             requestCode = requestCode,
             data = data
         ) { bankCard -> viewModel.addBankCard(bankCard) }
+
+        if (handled) return
+
+        if (requestCode == ASR_REQUEST && resultCode == MLAsrCaptureConstants.ASR_SUCCESS) {
+            // todo
+        }
     }
 
 }
