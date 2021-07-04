@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Card Holder</string>
-    <string name="cliend_id">104487363</string>
-    <string name="client_secret">ef4fbdc1585e9dde82ac8facfe2769f82ca367de728ed5d9fd739aef10e29220</string>
+    <string name="clientId">104487363</string>
+    <string name="clientSecret">ef4fbdc1585e9dde82ac8facfe2769f82ca367de728ed5d9fd739aef10e29220</string>
     <string name="accept">Onayla</string>
     <string name="add">Ekle</string>
     <string name="cardName">Kart ismi</string>
@@ -11,8 +11,28 @@
     <string name="cardExpireDate">Son kullanım tarihi</string>
     <string name="enterCardExpireDate">Son kullanım tarihini giriniz</string>
     <string name="bankName">Banka ismi</string>
+    <string name="mainBankNameTitle">Banka ismi: %s</string>
     <string name="organization">Organizasyon</string>
     <string name="yourCards">Kartlarınız</string>
     <string name="warnForAddNewCard">Henüz kartınız yok, eklemek için sağ yukardaki ekle butonunu seçiniz</string>
     <string name="noBankName">Banka ismi yok</string>
+    <string name="record">Kayıt</string>
+    <string name="enterCardNameWithMinReq">Lütfen kartınıza en az %d karakterden oluşan bir isim veriniz</string>
+    <string name="cardAlreadyExistWithTheNameYouEntered">Girmiş olduğunuz \'%s\' kart isminde başka bir kartınız mevcut</string>
+    <string name="invalidCardNumber">Lütfen geçerli bir kart numarası giriniz</string>
+    <string name="invalidExpireDate">"Lütfen son kullanım tarihini ay/yıl olarak giriniz"</string>
+    <string name="unableToFetchBankInformation">Kartınıza ait banka bilgileri alınamadı</string>
+    <string name="unableToFetchBankInformationDueToNoInternet">İnternet bağlantınız olmadığından, kartınıza ait banka bilgileri alınamadı…</string>
+
+    <string name="cardViewAndEditTitle">Kart Görüntüle &amp; Düzenle</string>
+    <string name="unableToScanCardWithErrorCode">Kart tarama işlemi yapılamadı: Hata kodu: %d</string>
+    <string name="cardScanCanceled">Kart tarama işlemini iptal ettiniz</string>
+    <string name="cardScanNotSupportedByCamera">Kart tarama işlemi kamera tarafından desteklenmiyor</string>
+    <string name="noCardFounds">Henüz kartınız yok</string>
+    <string name="totalCards">%d adet kartınız var</string>
+    <string name="unableToFetchCampaignInformationOfYourBank">Bankaya ait kampanya bilgilere ulaşılamadı</string>
+    <string name="unableToFetchCampaignInformationOfYourBankDueToNoInternetConnection">İnternet bağlantınız olmadığından, kartınıza ait kampanya bilgileri alınamadı…</string>
+    <string name="cancel">İptal</string>
+    <string name="openAppSettings">Uygulama Ayarlarını Aç</string>
+    <string name="accessDenied">İzin verilmedi</string>
 </resources>

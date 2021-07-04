@@ -31,11 +31,9 @@ inline operator fun <reified T : Any> SharedPreferences.set(key: String, value: 
         commit()
     }
 
+val simpleDateFormat by lazy { SimpleDateFormat("dd-MM-yyyy HH:mm:ss") }
 
-private val calendar by lazy { Calendar.getInstance() }
-private val simpleDateFormat by lazy { SimpleDateFormat("dd-MM-yyyy HH:mm:ss a") }
-
-fun getCurrentDateTimeAsFormatted(): String = simpleDateFormat.format(calendar.time)
+fun getCurrentDateTime(): Date = Calendar.getInstance().time
 
 fun Context.toast(message: String, length: Int = Toast.LENGTH_SHORT) =
     Toast.makeText(this, message, length).show()

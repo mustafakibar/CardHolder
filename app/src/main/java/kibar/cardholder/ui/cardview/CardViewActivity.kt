@@ -30,7 +30,7 @@ class CardViewActivity : BaseActivity() {
             ActivityCardViewBinding.inflate(layoutInflater).apply {
                 val toolbar = includedAppbar.toolbar
                 setSupportActionBar(toolbar)
-                supportActionBar?.title = "Kart Görüntüle & Düzenle"
+                supportActionBar?.title = getString(R.string.cardViewAndEditTitle)
                 setContentView(root)
             }
 
@@ -71,7 +71,7 @@ class CardViewActivity : BaseActivity() {
                     binData.data.brand?.let { binding.cardDetails.cardOrganization.setText(it) }
                 }
                 is Fail -> toast(
-                    binData.err.message ?: "Kart numarasına ait banka bilgilerine ulaşılamadı!"
+                    binData.err.message ?: getString(R.string.unableToFetchBankInformation)
                 )
             }
         }
@@ -97,15 +97,17 @@ class CardViewActivity : BaseActivity() {
                 toast(result.message)
             }
             is ValidationResult.Ok -> {
+                val bankCard = BankCard(
+                    name = result.name,
+                    number = result.number,
+                    expire = result.expire,
+                    issuer = result.issuer,
+                    organization = result.organization
+                )
+
                 viewModel.setResultAndFinishActivity(
                     activity = this@CardViewActivity,
-                    bankCard = BankCard(
-                        name = result.name,
-                        number = result.number,
-                        expire = result.expire,
-                        issuer = result.issuer,
-                        organization = result.organization
-                    )
+                    bankCard = bankCard
                 )
             }
         }

@@ -1,11 +1,15 @@
 package kibar.cardholder.ui.cardview
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.huawei.hms.mlplugin.card.bcr.MLBcrCaptureResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
+import kibar.cardholder.R
 import kibar.cardholder.data.bankcard.BankCardRepository
 import kibar.cardholder.data.bin.BindApiRepository
 import kibar.cardholder.model.BankCard
@@ -19,9 +23,14 @@ import javax.inject.Inject
 @HiltViewModel
 class CardViewActivityViewModel @Inject constructor(
     private val bindApiRepository: BindApiRepository,
-    private val bankCardRepository: BankCardRepository
-) :
-    ViewModel() {
+    private val bankCardRepository: BankCardRepository,
+    @field:SuppressLint("StaticFieldLeak")
+    @ApplicationContext private val context: Context
+) : ViewModel() {
+
+    companion object {
+        private const val MIN_REQ_NAME_LENGTH = 3
+    }
 
     sealed class BinData {
         class Success<T : BinResult>(val data: T) : BinData()
@@ -76,31 +85,37 @@ class CardViewActivityViewModel @Inject constructor(
         issuer: String?,
         organization: String?
     ): ValidationResult {
-        if (name.isNullOrBlank() || name.length <= 6) {
+        if (name.isNullOrBlank() || name.length < MIN_REQ_NAME_LENGTH) {
             return ValidationResult.Err(
-                ErrType.NAME,
-                "Lütfen kartınıza en az 6 karakterden oluşan bir isim veriniz"
+                type = ErrType.NAME,
+                message = context.getString(R.string.enterCardNameWithMinReq, MIN_REQ_NAME_LENGTH)
             )
         }
 
         val isFound = bankCardRepository.findByName(name)
         if (isFound != null) {
             return ValidationResult.Err(
-                ErrType.NAME,
-                "Girmiş olduğunuz '$name' kart isminde başka bir kartınız mevcut"
+                type = ErrType.NAME,
+                message = context.getString(R.string.cardAlreadyExistWithTheNameYouEntered, name)
             )
         }
 
         return when {
             number.isNullOrBlank() -> ValidationResult.Err(
-                ErrType.NUMBER,
-                "Lütfen geçerli bir kart numarası giriniz"
+                type = ErrType.NUMBER,
+                message = context.getString(R.string.invalidCardNumber)
             )
             expire.isNullOrBlank() -> ValidationResult.Err(
-                ErrType.EXPIRE,
-                "Lütfen son kullanım tarihini ay/yıl olarak giriniz"
+                type = ErrType.EXPIRE,
+                message = context.getString(R.string.invalidExpireDate)
             )
-            else -> ValidationResult.Ok(name, number, expire, issuer, organization)
+            else -> ValidationResult.Ok(
+                name = name,
+                number = number,
+                expire = expire,
+                issuer = issuer,
+                organization = organization
+            )
         }
     }
 

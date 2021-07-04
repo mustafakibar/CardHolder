@@ -11,7 +11,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kibar.cardholder.ui.cardview.CardViewHelper
 import javax.inject.Singleton
 
 @Module
@@ -34,9 +33,5 @@ object ApplicationModule {
             "data",
             AppCompatActivity.MODE_PRIVATE
         )
-
-    @Provides
-    @Singleton
-    fun provideCardViewAndEditHelper(@ApplicationContext context: Context) = CardViewHelper(context)
 
 }

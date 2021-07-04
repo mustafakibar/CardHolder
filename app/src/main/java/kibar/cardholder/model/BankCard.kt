@@ -3,8 +3,9 @@ package kibar.cardholder.model
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import kibar.cardholder.utils.getCurrentDateTimeAsFormatted
+import kibar.cardholder.utils.getCurrentDateTime
 import kotlinx.parcelize.Parcelize
+import java.util.*
 
 @Entity(tableName = "bank_card")
 @Parcelize
@@ -15,7 +16,7 @@ class BankCard(
     val expire: String,
     val issuer: String?,
     val organization: String?,
-    override val createdAt: String = getCurrentDateTimeAsFormatted()
+    override val createdAt: Date = getCurrentDateTime()
 ) : Card, Parcelable {
     override val id: String
         get() = name

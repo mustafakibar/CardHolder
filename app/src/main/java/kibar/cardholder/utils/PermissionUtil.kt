@@ -24,6 +24,12 @@ sealed class PermissionUtil(val name: String, val permsArray: Array<String>) {
         override val askUserDialogMessage: String = "Kamerayı kullanabilmek için izin vermelisiniz"
     }
 
+    object RecordAudio :
+        PermissionUtil(Manifest.permission.RECORD_AUDIO, permsArray = arrayOf(Manifest.permission.RECORD_AUDIO)) {
+        override val storageKeyName: String = "recordAudioPermissionAskedBefore"
+        override val askUserDialogMessage: String = "Konuşarak kartınıza erişebilmeniz için, mikrofona erişim izni vermelisiniz"
+    }
+
     object ReadExternalStorage :
         PermissionUtil(
             Manifest.permission.READ_EXTERNAL_STORAGE,

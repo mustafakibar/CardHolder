@@ -30,8 +30,6 @@ class SearchKitWebSearchDaoImpl @Inject constructor(
             field = value
         }
 
-    private val clientId by lazy { context.getString(R.string.cliend_id) }
-    private val clientSecret by lazy { context.getString(R.string.client_secret) }
     private val searchRequest by lazy {
         WebSearchRequest().apply {
             setLang(Language.TURKISH)
@@ -44,7 +42,7 @@ class SearchKitWebSearchDaoImpl @Inject constructor(
     private val cache = mutableMapOf<SEARCH_QUERY_NAME, SEARCH_QUERY_RESULT>()
 
     init {
-        SearchKitInstance.init(context, clientId)
+        SearchKitInstance.init(context, context.getString(R.string.clientId))
     }
 
     private suspend fun checkAccessToken() {
@@ -55,9 +53,12 @@ class SearchKitWebSearchDaoImpl @Inject constructor(
         accessTokenFetchInProgress.set(true)
 
         try {
-            val token = hmsAuthApiService.requestToken("client_credentials", clientId, clientSecret)
+            val token = hmsAuthApiService.requestToken(
+                clientId = context.getString(R.string.clientId),
+                clientSecret = context.getString(R.string.clientSecret)
+            )
             if (token.accessToken.isNullOrBlank()) {
-                Timber.e("Unable to retrieve token! Client id: $clientId, client secret: $clientSecret")
+                Timber.e("Unable to retrieve token!")
             }
 
             accessToken = token.accessToken ?: ""
@@ -71,7 +72,7 @@ class SearchKitWebSearchDaoImpl @Inject constructor(
 
     override suspend fun search(text: String): List<SearchResult> {
         if (!context.isNetworkAvailable()) {
-            throw IllegalStateException("İnternet bağlantınız olmadığından, kartınıza ait kampanya bilgileri alınamadı...")
+            throw IllegalStateException(context.getString(R.string.unableToFetchCampaignInformationOfYourBankDueToNoInternetConnection))
         }
 
         checkAccessToken()
