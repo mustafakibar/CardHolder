@@ -32,8 +32,11 @@ class CreditCardAdapter(
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) =
         with(viewHolder.view.creditCard) {
             val bankCard = data[position]
+
             cardNumber = bankCard.number
             expiryDate = bankCard.expire
+
+            viewHolder.view.cardName.text = bankCard.name
             viewHolder.view.createdAt.text = bankCard.createdAt
 
             val organization = bankCard.organization ?: ""
