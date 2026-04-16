@@ -41,4 +41,5 @@ gradlew.bat
 agconnect-services.json
 /app/cardholder.jks
 app/debug
-app/release
+app/release.idea/
+.vscode/
